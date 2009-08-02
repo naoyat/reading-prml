@@ -1,6 +1,7 @@
 (require "./lib/gl")
 (require "./lib/random")
 (require "./lib/util")
+(require "./lib/distribution")
 
 (use srfi-1)
 (use gauche.uvector)
@@ -18,9 +19,9 @@
 (define zmag (* zscale 0.9))
 
 (define NDIV 50)
-(define DRAW_MODE GL_LINE_LOOP)
-;(define DRAW-MODE GL_POLYGON)
-(set! *color-scale* 3.0)
+(set! *color-scale* 1.414213562)
+(set! *draw-mode* GL_LINE_LOOP)
+;(define *draw-mode* GL_POLYGON)
 
 (define sigma 0.2)
 (define beta (square (/ 1 sigma)))
