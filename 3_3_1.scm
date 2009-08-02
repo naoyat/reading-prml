@@ -46,38 +46,6 @@
 
 (define mode 1)
 
-(define (memoize proc)
-  (let1 fh (make-hash-table 'equal?)
-	(lambda args
-	  (or (hash-table-get fh args #f)
-		  (let1 val (apply proc args)
-			(hash-table-put! fh args val)
-			val)))
-	))
- 
-;(define (p_w_alpha w alpha)
-;  (gauss2
-#;(dotimes (i REP)
-  
-  (let* ([Phi (make-array (shape 0 2 0 2) 0 0 0 0)]
-		 [PhiT (array-transpose Phi)]
-		 [/S_N (array-add (array-mul-elements (identity-array 2) alpha)
-						  (array-mul-elements (array-mul PhiT Phi) beta)
-						  )]
-		 [S_N (array-inverse /S_N)]
-		 [t0 0] [t1 0]
-		 [T (make-array (shape 0 2 0 1) t0 t1)]
-		 [m_N_ar (array-mul-elements (array-mul (array-mul S_N PhiT) T) beta)]
-		 [m_N (vector (array-ref m_N_ar 0 0) (array-ref m_N_ar 0 1))]
-		 )
-
-	(set! S_0 S_N)
-	(set! m_0 m_N)
-	))
-
-;(dotimes (i 100)
-;  (format #t "~a\n" (U -1 1)))
-
 ;;
 (define (on-display)
   (gl-clear GL_COLOR_BUFFER_BIT)
