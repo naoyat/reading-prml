@@ -1,11 +1,6 @@
 (require "./lib/gl")
-(require "./lib/util")
-(require "./lib/random")
-(require "./lib/distribution")
-
-(use srfi-1)
-(use gauche.uvector)
-(use gauche.array)
+(require "./lib/util") ; Σ,Π, interpolate
+(require "./lib/distribution") ; Γ, make-Dirichlet-distribution
 
 (define xscale 1.0)
 (define yscale 1.0)
@@ -22,8 +17,6 @@
 
 (define Dir (make-Dirichlet-distribution (make-list 3 0)))
 (define params '(0.1 1 10))
-
-;(define (color z) '(0 0 1))
 
 (define (on-display)
   (gl-clear GL_COLOR_BUFFER_BIT)
@@ -58,11 +51,9 @@
       (draw-line r -1 0 r 1 0) ))
 
   ;; graph
-  (let* ([f (lambda (x y) (gauss2 (vector x y) (array->vector m_0) (array->vector S_0)))]
-         [f* (memoize f)])
-    (let ([ax -0.75] [ay 0]
-          [bx 0.75] [by -0.833]
-          [cx 0.75] [cy 0.833])
+  (let ([ax -0.75] [ay 0]
+        [bx 0.75] [by -0.833]
+        [cx 0.75] [cy 0.833])
     (dotimes (i NDIV)
       (let* ([i0 (/ i NDIV)]
              [x00 (interpolate ax bx i0)] [y00 (interpolate ay by i0)]
@@ -84,14 +75,12 @@
                 (list (foo (- 1 ir))
                       (foo (* ir (- 1 jr)))
                       (foo (* ir jr)))))
-            (define (f µ1 µ2 µ3) (/ ([Dir'p] (list µ1 µ2 µ3)) 12))
+            (define (f μ1 μ2 μ3) (/ ([Dir'p] (list μ1 μ2 μ3)) 12)) ;z軸方向1/12倍
             (draw-triangles ux uy (inf-filter (apply f (mu i j)))
                             vx vy (inf-filter (apply f (mu (+ i 1) j)))
-                            wx wy (inf-filter (apply f (mu (+ i 1) (+ j 1))) ))
-            ))))))
-
+                            wx wy (inf-filter (apply f (mu (+ i 1) (+ j 1))) )))))))
   (gl-flush))
-  
+
 (define (main args)
   (gl-main args))
 
@@ -109,8 +98,7 @@
   (let1 theta (* pi 0.6)
     (glu-look-at 0.5 -1.8 3.6
                  0 0 0
-                 (cos theta) (sin theta) 0) )
-  )
+                 (cos theta) (sin theta) 0) ))
 
 (define (on-keydown key x y)
   (when (= key 27) (exit 0))
@@ -119,5 +107,4 @@
     (set! params (append params (list param)))
     (set! Dir (make-Dirichlet-distribution (make-list 3 param))))
 
-  (glut-post-redisplay)
-  )
+  (glut-post-redisplay))
