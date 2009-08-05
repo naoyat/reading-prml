@@ -4,6 +4,18 @@
 (define (square x) (* x x))
 
 ;;
+;; n!
+;;
+(define (factorial n)
+  (let loop ((n n) (prod 1))
+    (if (= n 0) prod (loop (- n 1) (* prod n)))))
+
+;;
+;; nCm
+;;
+(define (C n m) (/ (factorial n) (factorial (- n m)) (factorial m)))
+
+;;
 ;; Σ, Π
 ;; 
 (define Σ (lambda (lis) (apply + lis)))
