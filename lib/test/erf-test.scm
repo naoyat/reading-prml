@@ -1,7 +1,7 @@
 (use gauche.test)
 (use srfi-1)
 
-(require "./erf")
+(require "../erf")
 (test-start "erf")
 
 (define (~= epsilon x y) (< (abs (- x y)) epsilon))

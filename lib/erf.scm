@@ -1,3 +1,7 @@
+(use c-wrapper) ; erf関数をlibmから
+(c-load "math.h" :import 'erf); :import 'erfc)
+(c-load "math.h" :import 'erfc)
+
 (use math.const) ;; pi
 
 (define *epsilon* 1e-12)
@@ -13,7 +17,7 @@
 ;;
 ;; (Gauss) erf (error function)
 ;;
-(define (erf z)
+(define (erf_ z)
   (let1 r (* -1 z z)
     (let loop ((n 0) (pmz 1) (n! 1) (sum 0))
       (let1 delta (/ pmz n! (+ n n 1))
@@ -27,7 +31,7 @@
 ;;
 ;; complementary error function
 ;;
-(define (erfc x) (- 1 (erf x)))
+(define (erfc_ x) (- 1 (erf x)))
 
 ;;
 ;; complex error function
