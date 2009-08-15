@@ -4,6 +4,8 @@
 (define *undef* (if #f #f))
 
 (define (%rep elem len) (make-list len elem))
+(define (%: from to) (iota (+ (- to from) 1) from))
+
 (define (make-list-with-generator len gen)
   (let loop ((i len) (res '()))
     (if (zero? i) (reverse! res)
