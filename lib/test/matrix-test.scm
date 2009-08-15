@@ -149,8 +149,8 @@
 			  (test* "A-1A = I" (%diag 3) (%*% A-1 A))
 			  (test* "(AB)-1 = B-1A-1" (%*% B-1 A-1) (%-1 (%*% A B)))
 			  (test* "(AT)-1) = (A-1)T" (%t (%-1 A)) (%-1 (%t A)) )
-			  (test* "|AB| = |A||B|" (* (%Det A) (%Det B)) (%Det (%*% A B)))
-			  (test* "|A-1| = 1/|A|" (/ (%Det A)) (%Det A-1))
+			  (test* "|AB| = |A||B|" (* (%det A) (%det B)) (%det (%*% A B)))
+			  (test* "|A-1| = 1/|A|" (/ (%det A)) (%det A-1))
 			  (loop (+ i 1)))
 		  (loop i) ))))
 

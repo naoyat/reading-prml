@@ -6,8 +6,8 @@
 (define (%rep elem len) (make-list len elem))
 (define (make-list-with-generator len gen)
   (let loop ((i len) (res '()))
-	(if (zero? i) (reverse! res)
-		(loop (- i 1) (cons (gen) res)))))
+    (if (zero? i) (reverse! res)
+        (loop (- i 1) (cons (gen) res)))))
 
 (use math.mt-random)
 (define *mt* (make <mersenne-twister> :seed (sys-time)))
@@ -46,7 +46,7 @@
 
 (define %solve array-inverse) ; 逆行列
 (define %-1 array-inverse)
-(define %Det determinant) ; 行列式 |A|
+(define %det determinant) ; 行列式 |A|
 
 ;; array-rotate-90
 ;; array-flip

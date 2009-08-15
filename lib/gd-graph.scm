@@ -39,7 +39,7 @@
 
 		(gd-image-rectangle im x0 yF xF y0 black)
 
-		(when proc (proc im f x0 xF y0 yF))
+		(when proc (proc im f x0 xF y0 yF black))
 
 		(save-as im path 'png)
 		(gd-image-destroy im)
@@ -68,6 +68,26 @@
 			 [f (gd-font-get-small)])
 		(define (x_tr x) (round->exact (+ x0 (* xmag (- x x-from)))))
 		(define (y_tr y) (round->exact (+ y0 (* ymag (- y y-from)))))
+		(define (plot-curve fn color)
+		  (let ([step (/ (- x-to x-from) 1000)])
+			(let loop ((x1 x-from) (y1 (fn x-from)))
+			  (let* ([x2 (+ x1 step)] [y2 (fn x2)])
+				(when (<= x2 x-to)
+				  (when (and y1 y2 (> (* y1 y2) -10))
+					(gd-image-line im (x_tr x1) (y_tr y1) (x_tr x2) (y_tr y2) color)
+					)
+				  (loop x2 y2))))))
+		(define (dispatcher msg)
+		  (case msg
+			[(plot-curve) (cut plot-curve <> <>)]
+			[(color) (cut gd-image-color-allocate im <> <> <>)]
+			[(black) black]
+			[else #f]))
+
+		(plot-curve p* red)
+#|
+		(define (x_tr x) (round->exact (+ x0 (* xmag (- x x-from)))))
+		(define (y_tr y) (round->exact (+ y0 (* ymag (- y y-from)))))
 
 ;;		(gd-image-fill im 1 1 white)
 ;		(gd-image-filled-rectangle im 0 0 width height white)
@@ -80,7 +100,7 @@
 				  (gd-image-line im (x_tr x1) (y_tr y1) (x_tr x2) (y_tr y2) red)
 				  )
 				(loop x2 y2)))))
-
+|#
 		(for y-from y-to y-step
 			 (lambda (y)
 			   (let ([y_ (y_tr y)]
@@ -108,7 +128,7 @@
 
 		(gd-image-rectangle im x0 yF xF y0 black)
 
-		(when proc (proc im f x0 xF y0 yF))
+		(when proc (proc im f x0 xF y0 yF dispatcher))
 
 ;		(gd-image-color-transparent im white)
 ;		(gd-image-set-pixel im 0 0 white)
@@ -117,3 +137,8 @@
 		(save-as im path 'png)
 		(gd-image-destroy im)
 		))))
+
+(define (gd-image-string+ im f x y s color)
+  (gd-image-string-ft im color "/Library/Fonts/Arial.ttf" 10.0 0 x (+ y 10) s))
+(define (gd-image-string+i im f x y s color)
+  (gd-image-string-ft im color "/Library/Fonts/Arial Italic.ttf" 10.0 0 x (+ y 10) s))

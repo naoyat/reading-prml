@@ -7,8 +7,8 @@
 (require "./lib/mac")
 
 (make-graph-png "gamma.png" '(-4 4 1) '(-10 10 5) Γ
-				(lambda (im f x0 xF y0 yF)
-				  (let ([black (gd-image-color-allocate im 0 0 0)]
+				(lambda (im f x0 xF y0 yF obj)
+				  (let ([black [obj'black]]
 						[x_o (round->exact (/ (+ x0 xF) 2))]
 						[y_o (round->exact (/ (+ y0 yF) 2))])
 					(gd-image-line im x_o yF x_o y0 black)
