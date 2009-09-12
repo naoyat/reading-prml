@@ -20,22 +20,20 @@
 		(define (x_tr x) (round->exact (+ x0 13 (* xmag (- x x-from)))))
 		(define (y_tr y) (round->exact (+ y0 (* ymag (- y y-from)))))
 		
-		(for x-from x-to x-step
-			 (lambda (x)
-			   (let ([x_ (x_tr x)]
-					 [y_ (round->exact (y_tr (p x)))])
-				 (when (< y_ y0)
-				   (gd-image-filled-rectangle im (- x_ w/2) (- y0 1) (+ x_ w/2) y_ gray))
-				 (gd-image-line im x_ yF x_ (+ yF 2) black)
-				 (gd-image-line im x_ (- y0 2) x_ y0 black)
-				 (gd-image-string im f (- x_ 2) (+ y0 2) (format #f "~a" x) black) )))
+		(for x x-from x-to x-step
+			 (let ([x_ (x_tr x)]
+				   [y_ (round->exact (y_tr (p x)))])
+			   (when (< y_ y0)
+				 (gd-image-filled-rectangle im (- x_ w/2) (- y0 1) (+ x_ w/2) y_ gray))
+			   (gd-image-line im x_ yF x_ (+ yF 2) black)
+			   (gd-image-line im x_ (- y0 2) x_ y0 black)
+			   (gd-image-string im f (- x_ 2) (+ y0 2) (format #f "~a" x) black) ))
 
-		(for y-from y-to y-step
-			 (lambda (y)
-			   (let1 y_ (y_tr y)
-					 (gd-image-string im f (- x0 20) (- y_ 7) (format #f "~a" (*. y)) black)
-					 (gd-image-line im x0 y_ (+ x0 2) y_ black)
-					 (gd-image-line im xF y_ (- xF 2) y_ black) )))
+		(for y y-from y-to y-step
+			 (let1 y_ (y_tr y)
+			   (gd-image-string im f (- x0 20) (- y_ 7) (format #f "~a" (*. y)) black)
+			   (gd-image-line im x0 y_ (+ x0 2) y_ black)
+			   (gd-image-line im xF y_ (- xF 2) y_ black) ))
 
 		(gd-image-rectangle im x0 yF xF y0 black)
 
@@ -45,7 +43,10 @@
 		(gd-image-destroy im)
 		))))
 
-(define (make-graph-png path x-range y-range p proc)
+(define-macro (make-graph-png path x-range y-range p proc)
+  `(make-graph-image ,path ,x-range ,y-range ,p ,proc 'png))
+
+(define (make-graph-image path x-range y-range p proc fmt)
   (define (inf-nan-filter x)
 	(cond [(eq? x +nan.0) #f]
 		  [(= x +inf.0) 99999]
@@ -82,6 +83,7 @@
 			[(plot-curve) (cut plot-curve <> <>)]
 			[(color) (cut gd-image-color-allocate im <> <> <>)]
 			[(black) black]
+			[(red) red]
 			[else #f]))
 
 		(plot-curve p* red)
@@ -101,14 +103,13 @@
 				  )
 				(loop x2 y2)))))
 |#
-		(for y-from y-to y-step
-			 (lambda (y)
-			   (let ([y_ (y_tr y)]
-					 [y-str (x->string y)])
-;					 (gd-image-string im f (- x0 20) (- y_ 7) (format #f "~a" (*. y)) black)
-				 (gd-image-string im f (- x0 3 (* 5 (string-length y-str))) (- y_ 7) y-str black)
-				 (gd-image-line im x0 y_ (+ x0 2) y_ black)
-				 (gd-image-line im xF y_ (- xF 2) y_ black) )))
+		(for y y-from y-to y-step
+			 (let ([y_ (y_tr y)]
+				   [y-str (x->string y)])
+										;					 (gd-image-string im f (- x0 20) (- y_ 7) (format #f "~a" (*. y)) black)
+			   (gd-image-string im f (- x0 3 (* 5 (string-length y-str))) (- y_ 7) y-str black)
+			   (gd-image-line im x0 y_ (+ x0 2) y_ black)
+			   (gd-image-line im xF y_ (- xF 2) y_ black) ))
 #|
 		(when (<= x-from 0 x-to)
 		  (let1 xo (x_tr 0)
@@ -117,14 +118,13 @@
 		  (let1 yo (y_tr 0)
 			(gd-image-line im x0 yo (+ xF 5) yo black)))
 |#
-		(for x-from x-to x-step
-			 (lambda (x)
-			   (let ([x_ (x_tr x)]
-;					 [y_ (round->exact (y_tr (p* x)))]
-					 )
-				 (gd-image-line im x_ yF x_ (+ yF 2) black)
-				 (gd-image-line im x_ (- y0 2) x_ y0 black)
-				 (gd-image-string im f (- x_ 2) (+ y0 2) (format #f "~a" x) black) )))
+		(for x x-from x-to x-step
+			 (let ([x_ (x_tr x)]
+										;					 [y_ (round->exact (y_tr (p* x)))]
+				   )
+			   (gd-image-line im x_ yF x_ (+ yF 2) black)
+			   (gd-image-line im x_ (- y0 2) x_ y0 black)
+			   (gd-image-string im f (- x_ 2) (+ y0 2) (format #f "~a" x) black) ))
 
 		(gd-image-rectangle im x0 yF xF y0 black)
 
@@ -134,7 +134,7 @@
 ;		(gd-image-set-pixel im 0 0 white)
 ;		(gd-image-color-allocate im 255 255 255) ;; dummy
 
-		(save-as im path 'png)
+		(save-as im path fmt)
 		(gd-image-destroy im)
 		))))
 

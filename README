@@ -1,9 +1,22 @@
 Reading PRML
 ----
 
+1_1.scm             [GD] 多項式曲線フィッティング
 
+Binomial.scm        [GD] 二項分布
+Beta.scm            [GD] ベータ分布
+Dirichlet.scm       [OpenGL] ディリクレ分布
+gamma-function.scm  [GD] Γ関数
+logit-probit.scm    [GD] logit, probit, logistic-sigmoid関数
+tanh.scm            [GD] tanh関数
 
+3_3_1.scm           [OpenGL] 単純な線形モデル y(x,w)=w0+w1x に対する逐次ベイズ学習の例。
+                             (上巻p154,図3.7参照)
 
-3_3_1.scm
-  単純な線形モデル y(x,w)=w0+w1x に対する逐次ベイズ学習の例。(上巻p154,図3.7参照)
+nn-matrix-sine.scm  [GD][ffmpeg] ニューラルネットワーク：sin関数を学習 (行列演算版)
+nn-matrix-xor.scm   ニューラルネットワーク：xor関数を学習 (行列演算版)
+nn-sine.scm         [GD][ffmpeg] ニューラルネットワーク：sin関数を学習 (有向グラフ版)
+nn-xor.scm          ニューラルネットワーク：XOR を学習 (有向グラフ版)
 
+nn-complex1.scm     [OpenGL] ニューラルネットワークで複素数（その１）：(x, y) → x+yi への変換
+nn-complex2.scm     [OpenGL] ニューラルネットワークで複素数（その２）：x+yi → -y+xi (90度回転)

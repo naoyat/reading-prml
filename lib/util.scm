@@ -54,9 +54,22 @@
 ;;
 ;; forマクロ
 ;;
-(define-macro (for from to step proc)
-  (let ([i (gensym)] [v (gensym)])
-	`(do ((,v (if #f #f))
-		  (,i ,from (+ ,i ,step)))
-		 ((> ,i ,to) ,v)
-	   (set! ,v (,proc ,i)))))
+(define-macro (for var from to step . body)
+  ;; for (var=from; var<=to; var+=step) { body ...; }
+  (let ((val (gensym))
+		(op (gensym)))
+	`(do ((,val (if #f #f))
+		  (,var ,from (+ ,var ,step))
+		  (,op (if (< 0 ,step) > <)))
+		 ((,op ,var ,to) ,val)
+	   (set! ,val (begin ,@body)))))
+
+;(print(%macroexpand (for i 0 10 2 (print i))))
+#|
+(for i 0 10 2 (print i))
+  => (do ((G0 (if #f #f))
+          (i 0 (+ i 2))
+          (G1 >))
+         ((> i 10) G0)
+       (set! G0 (begin (print i))))
+|#
