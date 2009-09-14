@@ -19,4 +19,5 @@ nn-sine.scm         [GD][ffmpeg] ニューラルネットワーク：sin関数�
 nn-xor.scm          ニューラルネットワーク：XOR を学習 (有向グラフ版)
 
 nn-complex1.scm     [OpenGL] ニューラルネットワークで複素数（その１）：(x, y) → x+yi への変換
-nn-complex2.scm     [OpenGL] ニューラルネットワークで複素数（その２）：x+yi → -y+xi (90度回転)
+nn-complex2-rot90.scm [OpenGL] ニューラルネットワークで複素数（その２）：x+yi → -y+xi (90度回転)
+nn-complex2-rot45.scm [OpenGL] ニューラルネットワークで複素数（その２）：45度回転

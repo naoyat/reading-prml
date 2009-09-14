@@ -6,19 +6,10 @@
 (require "./lib/random") ; Σ,Π, interpolate
 (require "./lib/util") ; Σ,Π, interpolate
 (require "./lib/neural-net")
-;(require "./lib/distribution")
 
 (use gauche.uvector)
 (use gauche.array)
 
-#;(define (make-ndZ-rand mu sig)
-  (let ([mu-rl (real-part mu)]
-		[mu-im (imag-part mu)])
-	(let1 rnd (make-nd2-rand (vector mu-rl mu-im)
-							 (array (shape 0 2 0 2) sig (/ sig 2) (/ sig 2) sig))
-	  (lambda ()
-		(receive (a b) (rnd)
-		  (make-rectangular a b))) )))
 (define (make-z-rand)
   (let ([N (make-nd-rand 0 1)]
 		[U (make-uniform-rand (- pi) (* pi))])
@@ -36,7 +27,7 @@
 			  (-1-i 1-i)
 			  (0-i  1)
 			  (1-i  1+i)
-			  (0 0)) ))
+			  (0 0))))
 
 (define (learned-func z)
   (let1 im (car ([nn'test] (list z)))
@@ -124,18 +115,9 @@
   (glu-perspective 60 1 0.1 20)
 
   (let1 theta (* pi 0.6)
-    (glu-look-at 0.9 -1.8 1.8
-;    (glu-look-at 0.75 -1.5 3.0
-;    (glu-look-at 0 0 5
-;    (glu-look-at 0 20 0
-                 0 0 0
-                 (cos theta) (sin theta) 0) )
-
-  )
+    (glu-look-at 0.9 -1.8 1.8 0 0 0 (cos theta) (sin theta) 0) ))
 
 (define (on-keydown key x y)
   (when (= key 27) (exit 0))
-;  (let1 ch (integer->char key)
-;	)
-  (glut-post-redisplay)
-  )
+  (glut-post-redisplay))
+
